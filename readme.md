@@ -49,7 +49,7 @@ React SPA  <—HTTPS/JSON—>  FastAPI  <—SQLAlchemy—>  PostgreSQL
 
 **Фронтенд** — React 19 + TypeScript, Vite, React Router, TanStack Query для запросов и кеша, CSS Modules.
 
-**База и инфраструктура** — PostgreSQL 17, Docker Compose, Nginx на стенде, GitHub Actions для линтеров и тестов.
+**База и инфраструктура** — PostgreSQL 181, Docker Compose, Nginx на стенде, GitHub Actions для линтеров и тестов.
 
 **Тесты** — pytest + httpx на бэкенде (отдельно проверяем пересечение бронирований и изоляцию чужих данных), Vitest + Testing Library на фронте, ruff/ESLint/Prettier за единым стилем.
 
