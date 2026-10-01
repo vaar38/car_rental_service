@@ -1,0 +1,18 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# Секреты
+.env
+
+# Frontend
+node_modules/
+
+# IDE / OS
+.vscode/
+.idea/
+Thumbs.db
