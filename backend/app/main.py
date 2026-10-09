@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.routers import auth, cars, categories, locations, users
+from app.routers import auth, cars, categories, locations, users, bookings
 
 app = FastAPI()
 
@@ -9,6 +9,7 @@ app.include_router(users.router)
 app.include_router(categories.router)
 app.include_router(locations.router)
 app.include_router(cars.router)
+app.include_router(bookings.router)
 
 
 @app.get("/api/health")
