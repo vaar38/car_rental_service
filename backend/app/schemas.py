@@ -1,5 +1,6 @@
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
+
 
 from pydantic import BaseModel
 
@@ -80,6 +81,29 @@ class CarOut(BaseModel):
     model: str
     year: int
     price_per_day: Decimal
+    status: str
+    created_at: datetime
+
+    model_config = {"from_attributes": True}
+
+
+class BookingCreate(BaseModel):
+    car_id: int
+    pickup_location_id: int
+    return_location_id: int
+    start_date: date
+    end_date: date
+
+
+class BookingOut(BaseModel):
+    id: int
+    user_id: int
+    car_id: int
+    pickup_location_id: int
+    return_location_id: int
+    start_date: date
+    end_date: date
+    total_price: Decimal
     status: str
     created_at: datetime
 
