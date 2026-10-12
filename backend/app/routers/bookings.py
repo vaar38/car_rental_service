@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import Booking, Car
+from app.models import Booking, Car, Role
 from app.schemas import BookingCreate, BookingOut
 from app.security import get_current_user
 
@@ -50,3 +50,36 @@ def create_booking(
     db.commit()
     db.refresh(booking)
     return booking
+
+
+@router.get("", response_model=list[BookingOut])
+def get_bookings(
+    user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    query = db.query(Booking)
+
+    role = db.query(Role).filter(Role.id == user.role_id).first()
+
+    if role.name != "staff":
+        query = query.filter(Booking.user_id == user.id)
+    
+    return query.order_by(Booking.start_date).all()
+
+
+@router.get("/{booking_id}", response_model=BookingOut)
+def get_booking(
+    booking_id: int,
+    db: Session = Depends(get_db),
+    user=Depends(get_current_user),
+):
+    booking = db.query(Booking).filter(Booking.id == booking_id).first()
+    if booking is None:
+        raise HTTPException(status_code=404, detail="Бронь не найдена")
+    
+    role = db.query(Role).filter(Role.id == user.role_id).first()
+
+    if role.name != "staff" and booking.user_id != user.id:
+        raise HTTPException(status_code=404, detail="Бронь не найдена")
+    
+    return booking 
