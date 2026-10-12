@@ -35,3 +35,18 @@ def create_booking(
     ).first()
     if overlapping is not None:
         raise HTTPException(status_code=409, detail="Машина уже забронирована на эти даты")
+    days = (data.end_date - data.start_date).days
+    total_price = car.price_per_day * days
+    booking = Booking(
+        user_id=user.id,
+        car_id=data.car_id,
+        pickup_location_id=data.pickup_location_id,
+        return_location_id=data.return_location_id,
+        start_date=data.start_date,
+        end_date=data.end_date,
+        total_price=total_price,
+    )
+    db.add(booking)
+    db.commit()
+    db.refresh(booking)
+    return booking
