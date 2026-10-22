@@ -60,9 +60,13 @@ def get_current_user(credentials=Depends(bearer), db: Session = Depends(get_db))
     return get_user_from_token(credentials.credentials, "access", db)
 
 
+def is_staff(user, db):
+    role = db.query(Role).filter(Role.id == user.role_id).first()
+    return role is not None and role.name == "staff"
+
+
 # Подключается к эндпоинту, если нужен сотрудник
 def require_staff(user=Depends(get_current_user), db: Session = Depends(get_db)):
-    role = db.query(Role).filter(Role.id == user.role_id).first()
-    if role.name != "staff":
+    if not is_staff(user, db):
         raise HTTPException(status_code=403, detail="Доступно только сотрудникам")
     return user
