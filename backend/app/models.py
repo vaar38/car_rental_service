@@ -1,4 +1,16 @@
-from sqlalchemy import CheckConstraint, Column, Date, DateTime, ForeignKey, Integer, Numeric, String, Text, func
+from sqlalchemy import (
+    CheckConstraint,
+    Column,
+    Date,
+    DateTime,
+    ForeignKey,
+    Integer,
+    Numeric,
+    String,
+    Text,
+    UniqueConstraint,
+    func,
+)
 
 from app.database import Base
 
@@ -47,6 +59,7 @@ class Car(Base):
     location_id = Column(Integer, ForeignKey("locations.id"), nullable=False, index=True)
     brand = Column(String(50), nullable=False)
     model = Column(String(50), nullable=False)
+    license_plate = Column(String(20), nullable=False)
     year = Column(Integer, nullable=False)
     price_per_day = Column(Numeric(10, 2), nullable=False)
     status = Column(String(20), nullable=False, default="available")
@@ -57,6 +70,7 @@ class Car(Base):
         CheckConstraint("price_per_day > 0"),
         CheckConstraint("year >= 1990"),
         CheckConstraint("status IN ('available', 'rented', 'maintenance')"),
+        UniqueConstraint("license_plate", name="uq_cars_license_plate"),
     )
 
 
